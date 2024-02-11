@@ -149,7 +149,7 @@ action:
             entity_id: '{{ light_entity }}'
             transition: 1
     - conditions:
-      - '{{ command == "move_to_color" }}'
+      - '{{ command == "move_to_color_temp" }}'
       sequence:
       - if:
         - condition: template
