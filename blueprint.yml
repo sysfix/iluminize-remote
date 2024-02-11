@@ -11,7 +11,7 @@ blueprint:
       selector:
         device:
           integration: 'zha'
-          manufacturer: 'Iluminize'
+          manufacturer: 'iluminize'
     light_1:
       name: 'Light 1'
       description: 'The light(s) to control when button "1" pressed. Note the
