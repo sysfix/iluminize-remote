@@ -1,0 +1,206 @@
+blueprint:
+  name: ZHA - Iluminize Remote control
+  description: |
+    Control the Uluminize remotes with ZHA.
+
+  domain: automation
+  input:
+    remote:
+      name: 'Remote'
+      description: 'Iluminize remote'
+      selector:
+        device:
+          integration: 'zha'
+          manufacturer: 'Iluminize'
+    light_1:
+      name: 'Light 1'
+      description: 'The light(s) to control when button "1" pressed. Note the
+        hardware ignores light number selections for the power button and will
+        always use this light.'
+      selector:
+        entity:
+          domain: light
+    light_2:
+      name: 'Light 2'
+      description: 'The light(s) to control when button "2" pressed'
+      selector:
+        entity:
+          domain: light
+    light_3:
+      name: Light 3
+      description: 'The light(s) to control when button "3" pressed.  Note that
+        this entity is the only one affected by "Power" presses, so you might
+        consider a group enity.'
+      selector:
+        entity:
+          domain: light
+    light_4:
+      name: Light 4
+      description: 'The light(s) to control when button "3" pressed.  Note that
+        this entity is the only one affected by "Power" presses, so you might
+        consider a group enity.'
+      selector:
+        entity:
+          domain: light
+
+    force_brightness:
+      name: 'Force turn on brightness'
+      description: 'Force the brightness to the set level below, when the "on"
+        button on the remote is pushed and lights turn on.'
+      default: false
+      selector:
+        boolean:
+    brightness:
+      name: 'Brightness'
+      description: 'Brightness of the light(s) when turning on'
+      default: 50
+      selector:
+        number:
+          min: 0.0
+          max: 100.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: '%'
+    min_brightness:
+      name: 'Minimum Brightness'
+      description: 'The minimum brightness of the light(s) when dimming down. Set
+        this to zero to disable this feature.'
+      default: 1
+      selector:
+        number:
+          min: 0.0
+          max: 100.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: '%'
+    button_white_short:
+      name: 'White Button Short Press'
+      description: 'Action to run on short button press "white"'
+      default: []
+      selector:
+        action: {}
+    button_white_long:
+      name: 'White Button Long Press'
+      description: 'Action to run on long button press "white"'
+      default: []
+      selector:
+        action: {}
+    button_play:
+      name: 'Play Button Press'
+      description: 'Action to run on button press "play"'
+      default: []
+      selector:
+        action: {}
+    color_add_steps:
+      name: 'Additional Color Steps'
+      description: 'Additional action to run on color changes'
+      default: []
+      selector:
+        action: {}
+
+mode: restart
+max_exceeded: silent
+variables:
+  force_brightness: !input 'force_brightness'
+  min_brightness: !input 'min_brightness'
+  light_1: !input 'light_1'
+  light_2: !input 'light_2'
+  light_3: !input 'light_3'
+
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input 'remote'
+
+action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+      light_entity: |-
+        {% if endpoint_id == 1 %}
+          {{ light_1 }}
+        {% elif endpoint_id == 2 %}
+          {{ light_2 }}
+        {% elif endpoint_id == 3 %}
+          {{ light_3 }}
+        {% endif %}
+  - choose:
+    - conditions: '{{ command == "on" or command == "off" }}'
+      sequence:
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 500
+      - choose:
+        - conditions: "{{ force_brightness }}"
+          sequence:
+          - service: light.toggle
+            data_template:
+              entity_id: '{{ light_entity }}'
+              transition: 1
+              brightness_pct: !input 'brightness'
+        default:
+        - service: light.toggle
+          data_template:
+            entity_id: '{{ light_entity }}'
+            transition: 1
+    - conditions:
+      - '{{ command == "move_to_color" }}'
+      sequence:
+      - if:
+        - condition: template
+          value_template: True
+        then: !input 'color_add_steps'
+      - service: light.turn_on
+        data_template:
+          entity_id: '{{ light_entity }}'
+          xy_color:
+          - '{{ (trigger.event.data.args[0] / 65535) }}'
+          - '{{ (trigger.event.data.args[1] / 65535) }}'
+    - conditions: '{{ command == "move_with_on_off" }}'
+      sequence:
+      - repeat:
+          count: 15
+          sequence:
+          - choose:
+            - conditions:
+              - condition: template
+                value_template: '{{ trigger.event.data.params.move_mode == 1 }}'
+              sequence:
+              - service: light.turn_on
+                data_template:
+                  entity_id: '{{ light_entity }}'
+                  brightness_step_pct: 10
+                  transition: 1
+            - conditions:
+              - condition: template
+                value_template: '{{ trigger.event.data.params.move_mode == 0 }}'
+              sequence:
+              - if:
+                - condition: template
+                  value_template: '{{ (((state_attr(light_entity, "brightness") | int(0) / 255) * 100) | int(0) - 10) >= min_brightness }}'
+                then:
+                - service: light.turn_on
+                  data_template:
+                    entity_id: '{{ light_entity }}'
+                    transition: 1
+                    brightness_step_pct: -10
+                else:
+                - service: light.turn_on
+                  data_template:
+                    entity_id: '{{ light_entity }}'
+                    brightness_pct: '{{ min_brightness }}'
+                    transition: 1
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 1
+              milliseconds: 0
+    - conditions: '{{ command == "move_hue" }}'
+      sequence: !input 'button_play'
+    - conditions: '{{ command == "move_to_color_temp" }}'
+      sequence: !input 'button_white_short'
+    - conditions: '{{ command == "stop_move_step" }}'
+      sequence: !input 'button_white_long'
