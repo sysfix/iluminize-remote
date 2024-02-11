@@ -105,6 +105,7 @@ variables:
   light_1: !input 'light_1'
   light_2: !input 'light_2'
   light_3: !input 'light_3'
+  light_4: !input 'light_4'
 
 trigger:
   - platform: event
@@ -123,6 +124,8 @@ action:
           {{ light_2 }}
         {% elif endpoint_id == 3 %}
           {{ light_3 }}
+        {% elif endpoint_id == 4 %}
+          {{ light_4 }}
         {% endif %}
   - choose:
     - conditions: '{{ command == "on" or command == "off" }}'
