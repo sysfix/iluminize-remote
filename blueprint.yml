@@ -2,7 +2,6 @@ blueprint:
   name: ZHA - Iluminize Remote control
   description: |
     Control the Uluminize remotes with ZHA.
-
   domain: automation
   input:
     remote:
