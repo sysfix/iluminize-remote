@@ -22,6 +22,7 @@ blueprint:
     light_2:
       name: 'Light 2'
       description: 'The light(s) to control when button "2" pressed'
+      default: []
       selector:
         entity:
           domain: light
@@ -30,6 +31,7 @@ blueprint:
       description: 'The light(s) to control when button "3" pressed.  Note that
         this entity is the only one affected by "Power" presses, so you might
         consider a group enity.'
+      default: []
       selector:
         entity:
           domain: light
@@ -38,6 +40,7 @@ blueprint:
       description: 'The light(s) to control when button "3" pressed.  Note that
         this entity is the only one affected by "Power" presses, so you might
         consider a group enity.'
+      default: []
       selector:
         entity:
           domain: light
