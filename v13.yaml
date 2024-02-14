@@ -245,7 +245,7 @@ action:
       - service: light.turn_on
         data_template:
           entity_id: '{{ light_entity }}'
-          brightness_pct: '{{ trigger.event.data.args[0] }}'
+          brightness_pct: '{{ trigger.event.data.params.level }}'
             
             
     - conditions:
