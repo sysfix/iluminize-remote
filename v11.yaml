@@ -216,6 +216,7 @@ action:
         {% elif endpoint_id == 4 %}
           {{ light_4 }}
         {% endif %}
+        
   - choose:
     - conditions: '{{ command == "on" or command == "off" }}'
       sequence:
@@ -237,6 +238,19 @@ action:
           data_template:
             entity_id: '{{ light_entity }}'
             transition: 1
+            
+    - conditions:
+      - '{{ command == "move_to_level_with_on_off" }}'
+      sequence:
+      - if:
+        - condition: template
+          value_template: True
+      - service: light.turn_on
+        data_template:
+          entity_id: '{{ light_entity }}'
+          brightness_pct: '{{ trigger.event.data.args[0] }}'
+            
+            
     - conditions:
       - '{{ command == "move_to_color_temp" }}'
       sequence:
@@ -248,6 +262,8 @@ action:
         data_template:
           entity_id: '{{ light_entity }}'
           color_temp_kelvin: '{{ (trigger.event.data.args[0] * 13.7) }}'
+
+
     - conditions: '{{ command == "move_with_on_off" }}'
       sequence:
       - repeat:
@@ -287,9 +303,15 @@ action:
               minutes: 0
               seconds: 1
               milliseconds: 0
+              
+              
     - conditions: '{{ command == "move_hue" }}'
       sequence: !input 'button_play'
+      
+      
     - conditions: '{{ command == "move_to_color_temp" }}'
       sequence: !input 'button_white_short'
+      
+      
     - conditions: '{{ command == "stop_move_step" }}'
       sequence: !input 'button_white_long'
