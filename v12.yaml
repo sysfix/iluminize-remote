@@ -22,7 +22,6 @@ blueprint:
     light_2:
       name: 'Light 2'
       description: 'The light(s) to control when button "2" pressed'
-      default: []
       selector:
         entity:
           domain: light
@@ -31,7 +30,6 @@ blueprint:
       description: 'The light(s) to control when button "3" pressed.  Note that
         this entity is the only one affected by "Power" presses, so you might
         consider a group enity.'
-      default: []
       selector:
         entity:
           domain: light
@@ -40,7 +38,6 @@ blueprint:
       description: 'The light(s) to control when button "3" pressed.  Note that
         this entity is the only one affected by "Power" presses, so you might
         consider a group enity.'
-      default: []
       selector:
         entity:
           domain: light
@@ -245,9 +242,6 @@ action:
     - conditions:
       - '{{ command == "move_to_level_with_on_off" }}'
       sequence:
-      - if:
-        - condition: template
-          value_template: True
       - service: light.turn_on
         data_template:
           entity_id: '{{ light_entity }}'
