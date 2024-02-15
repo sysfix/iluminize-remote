@@ -129,7 +129,7 @@ action:
         {% endif %}
         
   - choose:
-    - conditions: '{{ command == "on" }}'
+    - conditions: '{{ command == "On" }}'
       sequence:
       - delay:
           hours: 0
@@ -150,7 +150,7 @@ action:
             entity_id: '{{ light_entity }}'
             transition: 1
             
-    - conditions: '{{ command == "off" }}'
+    - conditions: '{{ command == "Off" }}'
       sequence:
       - delay:
           hours: 0
