@@ -139,7 +139,7 @@ action:
       - choose:
         - conditions: "{{ force_brightness }}"
           sequence:
-          - service: light.toggle
+          - service: light.turnon
             data_template:
               entity_id: '{{ light_entity }}'
               transition: 1
@@ -166,7 +166,7 @@ action:
               transition: 1
               brightness_pct: !input 'brightness'
         default:
-        - service: light.toggle
+        - service: light.turnoff
           data_template:
             entity_id: '{{ light_entity }}'
             transition: 1 
