@@ -1,6 +1,6 @@
 blueprint:
   name: Robb RGBW (de lange witte)
-  description: V5
+  description: V6
   domain: automation
   input:
     remote:
@@ -15,11 +15,7 @@ blueprint:
       name: Group 1
       description: Light(s) to control when group 1 is selected
       default: []
-      selector:
-        target:
-          entity:
-            domain: light
-
+light_entity
     group_2:
       name: Group 2
       description: Light(s) to control when group 1 is selected
