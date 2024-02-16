@@ -1,6 +1,6 @@
 blueprint:
   name: Robb RGBW (de lange witte)
-  description: Control lights with the iluminize 511.344 RGBW Remote
+  description: V5
   domain: automation
   input:
     remote:
@@ -10,19 +10,6 @@ blueprint:
         device:
           integration: 'zha'
           manufacturer: 'ROBB smarrt'
-
-    version:
-      name: 'version'
-      description: 'Blueprint version'
-      default: 1
-      selector:
-        number:
-          min: 0.0
-          max: 100.0
-          mode: slider
-          step: 1.0
-          unit_of_measurement: '%'
-
 
     group_1:
       name: Group 1
@@ -96,12 +83,11 @@ action:
   - choose:
     - conditions: '{{ command == "on" }}'
       sequence:
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 0
-          milliseconds: 500
-
+      - service: light.turn_on
+        data_template:
+          entity_id: '{{ light_entity }}'
+          transition: 1
+          
   - choose:
     - conditions: '{{ command == "off" }}'
       sequence:
@@ -109,11 +95,3 @@ action:
         data_template:
           entity_id: '{{ light_entity }}'
           transition: 1
-
-
-
-      - delay:
-          hours: 0
-          minutes: 0
-          seconds: 0
-          milliseconds: 500
