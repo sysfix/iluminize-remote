@@ -1,0 +1,81 @@
+blueprint:
+  name: iluminize ZG2819S-RGBW
+  description: Control lights with the iluminize 511.344 RGBW Remote
+  domain: automation
+  input:
+    remote:
+      name: 'Remote'
+      description: iluminize 511.344 remote to use
+      selector:
+        device:
+          integration: 'zha'
+          manufacturer: 'Sunricher'
+
+    group_1:
+      name: Group 1
+      description: Light(s) to control when group 1 is selected
+      default: []
+      selector:
+        target:
+          entity:
+            domain: light
+
+    group_2:
+      name: Group 2
+      description: Light(s) to control when group 1 is selected
+      default: []
+      selector:
+        target:
+          entity:
+            domain: light
+
+    group_3:
+      name: Group 3
+      description: Light(s) to control when group 1 is selected
+      default: []
+      selector:
+        target:
+          entity:
+            domain: light
+
+
+    brightness_step_value:
+      name: 'Brightness step value'
+      description: 'Step value for increasing / decreasing brightness'
+      default: 10
+      selector:
+        number:
+          min: 0.0
+          max: 100.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: '%'
+          
+          
+mode: restart
+max_exceeded: silent
+variables:
+  brightness_step_value: !input 'brightness_step_value'
+  group_1: !input 'group_1'
+  group_2: !input 'group_2'
+  group_3: !input 'group_3'
+
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input 'remote'
+
+
+action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+      light_entity: |-
+        {% if endpoint_id == 1 %}
+          {{ group_1 }}
+        {% elif endpoint_id == 2 %}
+          {{ group_2 }}
+        {% elif endpoint_id == 3 %}
+          {{ group_3 }}
+        {% endif %}
