@@ -1,6 +1,6 @@
 blueprint:
   name: Robb RGBW (de lange witte)
-  description: V8
+  description: V9
   domain: automation
   input:
     remote:
@@ -49,7 +49,7 @@ blueprint:
           unit_of_measurement: '%'
           
           
-mode: restart
+mode: parallel
 max_exceeded: silent
 variables:
   brightness_step_value: !input 'brightness_step_value'
