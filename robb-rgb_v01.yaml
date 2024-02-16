@@ -10,3 +10,70 @@ blueprint:
         device:
           integration: 'zha'
           manufacturer: 'Sunricher'
+
+    target_light:
+      name: Light(s)
+      description: The light(s) to control
+      selector:
+        target:
+          entity:
+            domain: light
+    colour_ref:
+      name: Colour Temperature Refence
+      description: The light to use as a colour temp reference
+      selector:
+        entity:
+          domain: light
+    working_scene:
+      name: Button1
+      description: The scene to be triggered when the 1 button is pressed
+      selector:
+        entity:
+          domain: scene
+    sunset_scene:
+      name: Button2
+      description: The scene to be triggered when the 2 is pressed
+      selector:
+        entity:
+          domain: scene
+    party_scene:
+      name: Button3
+      description: The scene to be triggered when the 3 is pressed
+      selector:
+        entity:
+          domain: scene
+    night_scene:
+      name: Button4
+      description: The scene to be triggered when the 4 is pressed
+      selector:
+        entity:
+          domain: scene
+    force_brightness:
+      name: Force turn on brightness
+      description: Force the brightness to the set level below, when the "on" button
+        on the remote is pushed and lights turn on.
+      default: false
+      selector:
+        boolean: {}
+    brightness:
+      name: Brightness
+      description: Brightness of the light(s) when turning on
+      default: 50
+      selector:
+        number:
+          min: 0.0
+          max: 100.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: '%'
+    step_value:
+      name: Brightness increment/decrement percent
+      description: Set the step percent value for brightness and color warmth
+      default: 10
+      selector:
+        number:
+          min: 1.0
+          max: 20.0
+          mode: slider
+          step: 1.0
+          unit_of_measurement: '%'
