@@ -1,6 +1,6 @@
 blueprint:
   name: iluminize ZG2819S-RGBW
-  description: Control lights with a iluminize 511.344 RGBW Remote
+  description: Control lights with the iluminize 511.344 RGBW Remote
   domain: automation
   input:
     remote:
