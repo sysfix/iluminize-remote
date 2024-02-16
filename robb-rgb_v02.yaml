@@ -77,3 +77,15 @@ blueprint:
           mode: slider
           step: 1.0
           unit_of_measurement: '%'
+
+mode: restart
+max_exceeded: silent
+variables:
+  force_brightness: !input 'force_brightness'
+  step_value: !input 'step_value'
+  colour_ref: !input 'colour_ref'
+trigger:
+- platform: event
+  event_type: zha_event
+  event_data:
+    device_id: !input 'remote'
