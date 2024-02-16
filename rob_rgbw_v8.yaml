@@ -1,6 +1,6 @@
 blueprint:
   name: Robb RGBW (de lange witte)
-  description: V7
+  description: V8
   domain: automation
   input:
     remote:
