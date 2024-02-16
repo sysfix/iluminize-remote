@@ -1,16 +1,30 @@
 blueprint:
+  name: ZHA - Iluminize Remote control
+  description: |
+    Control the Uluminize remotes with ZHA.
+  domain: automation
+  input:
+    remote:
+      name: 'Remote'
+      description: 'Iluminize remote'
+      selector:
+        device:
+          integration: 'zha'
+          manufacturer: 'iluminize'
+
+
+blueprint:
   name: iluminize ZG2819S-RGBW
   description: Control lights with a iluminize 511.344 RGBW Remote
   domain: automation
   input:
     remote:
-      name: Remote
+      name: 'Remote'
       description: iluminize 511.344 remote to use
       selector:
         device:
-          integration: deconz
-          manufacturer: iluminize
-          model: ZG2819S-RGBW
+          integration: 'zha'
+          manufacturer: 'Sunricher'
     target_light:
       name: Light(s)
       description: The light(s) to control
