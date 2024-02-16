@@ -11,6 +11,14 @@ blueprint:
           integration: 'zha'
           manufacturer: 'ROBB smarrt'
 
+    version_1:
+      name: version_1
+      description: Light(s) to control when group 1 is selected
+      default: []
+      selector:
+        target:
+          entity:
+    
     group_1:
       name: Group 1
       description: Light(s) to control when group 1 is selected
