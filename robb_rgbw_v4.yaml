@@ -11,14 +11,6 @@ blueprint:
           integration: 'zha'
           manufacturer: 'ROBB smarrt'
 
-    version_1:
-      name: version_1
-      description: Light(s) to control when group 1 is selected
-      default: []
-      selector:
-        target:
-          entity:
-    
     group_1:
       name: Group 1
       description: Light(s) to control when group 1 is selected
@@ -91,10 +83,11 @@ action:
   - choose:
     - conditions: '{{ command == "on" }}'
       sequence:
-      - service: light.turn_on
-        data_template:
-          entity_id: '{{ light_entity }}'
-          transition: 1
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 500
 
   - choose:
     - conditions: '{{ command == "off" }}'
@@ -103,3 +96,11 @@ action:
         data_template:
           entity_id: '{{ light_entity }}'
           transition: 1
+
+
+
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 500
