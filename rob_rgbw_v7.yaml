@@ -15,25 +15,25 @@ blueprint:
       name: Group 1
       description: Light(s) to control when group 1 is selected
       default: []
-light_entity
+      selector:
+        entity:
+          domain: light
 
     group_2:
       name: Group 2
       description: Light(s) to control when group 1 is selected
       default: []
       selector:
-        target:
-          entity:
-            domain: light
+        entity:
+          domain: light
 
     group_3:
       name: Group 3
       description: Light(s) to control when group 1 is selected
       default: []
       selector:
-        target:
-          entity:
-            domain: light
+        entity:
+          domain: light
 
 
     brightness_step_value:
