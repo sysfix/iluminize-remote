@@ -1,6 +1,6 @@
 blueprint:
   name: Robb RGBW (de lange witte)
-  description: V10
+  description: V11
   domain: automation
   input:
     remote:
@@ -107,7 +107,7 @@ action:
       - service: light.turn_on
         data_template:
           entity_id: '{{ light_entity }}'
-          transition: 1
+          hs_color:  "{{ trigger.event.data.args[0] }}"
 
   - choose:
     - conditions: '{{ command == "move_to_color_temp" }}'
@@ -115,4 +115,4 @@ action:
       - service: light.turn_on
         data_template:
           entity_id: '{{ light_entity }}'
-          color_temp: "{{ trigger.event.data.args[0] }}"
+          color_temp:   "{{ trigger.event.data.args[0] }}"
